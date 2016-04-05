@@ -77,7 +77,7 @@ a:hover {
 #content ul.projects .desc {
     font-size: 85%;
     color: #666;
-    margin-top: 5px;   
+    margin-top: 5px;
 }
 #content ul.projects li a {
     font-size: 110%;
@@ -94,7 +94,6 @@ a:hover {
     font-size: 100%;
 }
 #content ul.projects li {
-    float: left;
     width: 31%;
     margin-right: 2%;
     margin-bottom: 15px;
@@ -344,4 +343,7 @@ form div p {
 }
 .message strong {
     font-weight: bold;
+}
+.clear {
+    clear:both;
 }

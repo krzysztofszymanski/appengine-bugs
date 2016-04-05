@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Confirm deletion of {{issue.name}} from {{issue.project.name}} on GitBug{% endblock %}
+{% block title %}Confirm deletion of {{issue.name}} from {{issue.project.name}}{% endblock %}
 
 {% block header %}
 <div id="header">
@@ -28,7 +28,7 @@
 {% endif %}
 
 <div id="txt">
-    {{issue.html}}
+    {{issue.description}}
 </div>
 
 {% endblock %}

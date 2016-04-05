@@ -15,10 +15,10 @@
         <th scope="row">
             <a href="/projects{{issue.internal_url}}">{{issue.name}}</a>
         </th>
-        <td>#gitbug{{issue.identifier}}
+        <td>#issue{{issue.identifier}}
         </td>
         <td>
-            {{issue.html|striptags|truncatewords:10}}
+            {{issue.description|striptags|truncatewords:10}}
         </td>
         <td>
             {{issue.created_date|date:"jS F Y"}}
@@ -31,5 +31,5 @@
     </tbody>
     </table>
 {% else %}
-    <p class="intro">Welcome to GitBug. You project has been created. You can get on and add Issues straight away.</p>
+    <p class="intro">Welcome to KNKTechology issue tracker. You project has been created. You can get on and add Issues straight away.</p>
 {% endif %}

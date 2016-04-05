@@ -12,4 +12,4 @@ DEBUG = debug
 CACHE = not debug
 
 # URL of the current system, used in feeds
-SYSTEM_URL = "http://gitbug.appspot.com"
+SYSTEM_URL = "http://knktechnologybugtracker.appspot.com"

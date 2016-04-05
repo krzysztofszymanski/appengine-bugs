@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{project.name}} on GitBug{% endblock %}
+{% block title %}{{project.name}}{% endblock %}
 
 {% block header %}
     {% if not user %}
@@ -10,10 +10,17 @@
     {% endif %}
     <div id="header">
         <h1>{{project.name}}</h1>
-
         <p>Created on {{project.created_date|date:"jS F Y"}} </p>
-        {% if project.description %}<div class="desc">{{project.html}}</div>{% endif %}
+
+        {% if project.description %}<div class="desc">{{project.description}}</div>{% endif %}
         {% if project.url %}<p><a href="{{project.url}}">{{project.url}}</a></p>{% endif %}
+        <p>View:
+            <a href="/projects/{{project.slug}}/?status=open">Open issues</a>
+            | <a href="/projects/{{project.slug}}/?status=closed">Closed issues</a>
+            | <a href="/projects/{{project.slug}}/?status=all">All issues</a>
+
+        </p>
+
     </div>
 {% endblock %}
 
@@ -34,9 +41,9 @@
 {% endblock %}
 
 {% block feed %}
-<link rel="alternate" type="application/rss+xml" title="Issues for {{project.name}} on GitBug" href="/projects/{{project.slug}}.rss" />
-<link rel="alternate" type="application/rss+xml" title="Open issues for {{project.name}} on GitBug" href="/projects/{{project.slug}}.rss?open=1" />
-<link rel="alternate" type="application/rss+xml" title="Closed issues for {{project.name}} on GitBug" href="/projects/{{project.slug}}.rss?closed=1" />
+<link rel="alternate" type="application/rss+xml" title="Issues for {{project.name}}" href="/projects/{{project.slug}}.rss" />
+<link rel="alternate" type="application/rss+xml" title="Open issues for {{project.name}}" href="/projects/{{project.slug}}.rss?open=1" />
+<link rel="alternate" type="application/rss+xml" title="Closed issues for {{project.name}}" href="/projects/{{project.slug}}.rss?closed=1" />
 {% endblock %}
 
 {% block projects_nav %} class="this"{% endblock %}
@@ -74,15 +81,6 @@
         <li class="first"><a href="delete/">Delete project</a></li>
         <li><a href="settings/">Settings</a></li>
     </ul>
-</div>
-
-<div id="api">
-    <p>You can close bugs via a <a href="http://github.com">GitHub</a> style web hook. You'll need the following <em>details</em> and to include the issue identifier (eg. #gitbug1234) in the commit message. For instance:</p>
-    <blockquote><p>changed settings file which fixes bug #gitbug52</p></blockquote>
-    <div class="key">
-        <p><code>{{project.key}}</code></p>
-        <a href="http://gitbug.appspot.com/projects/{{project.slug}}/hook?key={{project.key}}">http://gitbug.appspot.com/projects/{{project.slug}}/hook?key={{project.key}}</a>
-    </div>
 </div>
 
 

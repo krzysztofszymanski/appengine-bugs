@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}GitBug Frequently Asked Questions{% endblock %}
+{% block title %}Frequently Asked Questions{% endblock %}
 
 {% block header %}
 <div id="header">
@@ -17,19 +17,9 @@
 
 <p>If it's another field then probably not, but do ask anyway. My focus here is keeping this as simple as possible. There are lots of good issue tracking products which allow more control, or hundreds of drop down menus, or permission models and workflows.</p>
 
-<h2>I Found a Bug</h2>
-
-<p>This is an early release so there might very well be a few bugs (or features I haven't built yet). You can file them at the <a href="http://gitbug.appspot.com/projects/gitbug/">gitbug project</a>. If the bug is in adding a bug you can email them to me at <a href="mailto:gareth@morethanseven.net">gareth@morethanseven.net</a></p>
-
 <h2>Do you have an API?</h2>
 
 <p>Not exactly, at least not a write API. Most of the views are available as JSON and RSS at the moment as well as HTML.</p>
-
-<pre>http://gitbug.appspot.com/projects.json
-http://gitbug.appspot.com/projects.rss
-http://gitbug.appspot.com/projects/{project-name}.json
-http://gitbug.appspot.com/projects/{project-name}/{issue-name}.json
-http://gitbug.appspot.com/projects/{project-name}.rss</pre>
 
 <p>I'd like to add a write API at a later date. In fact it's required by some of the other nice features I'd like to add.</p>
 

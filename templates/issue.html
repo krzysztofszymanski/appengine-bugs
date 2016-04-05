@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{issue.name}} in {{issue.project.name}} on GitBug{% endblock %}
+{% block title %}{{issue.name}} in {{issue.project.name}}{% endblock %}
 
 {% block header %}
 {% if not user %}
@@ -73,14 +73,13 @@
     </div>
     
     <input type="submit" value="Submit" class="btn"/>
-    <a href="delete/">Delete</a>
     <a href=".">Cancel</a>
 </form>
 
 {% endif %}
 
 <div id="txt">
-{{issue.html}}
+<p>{{issue.description}}</p>
 </div>
 
 {% if issues %}

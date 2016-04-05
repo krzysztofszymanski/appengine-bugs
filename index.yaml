@@ -10,21 +10,18 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Unused in query history -- copied from input.
 - kind: Issue
   properties:
   - name: fixed
   - name: project
   - name: created_date
 
-# Used 4 times in query history.
 - kind: Issue
   properties:
   - name: fixed
   - name: project
   - name: name
 
-# Used 6 times in query history.
 - kind: Issue
   properties:
   - name: fixed
@@ -33,14 +30,12 @@ indexes:
   - name: created_date
     direction: desc
 
-# Used 13 times in query history.
 - kind: Issue
   properties:
   - name: project
   - name: fixed
   - name: created_date
 
-# Unused in query history -- copied from input.
 - kind: Issue
   properties:
   - name: project
@@ -48,7 +43,6 @@ indexes:
   - name: created_date
     direction: desc
 
-# Unused in query history -- copied from input.
 - kind: Issue
   properties:
   - name: project
@@ -56,13 +50,11 @@ indexes:
     direction: desc
   - name: created_date
 
-# Unused in query history -- copied from input.
 - kind: Issue
   properties:
   - name: project
   - name: name
 
-# Used 2 times in query history.
 - kind: Project
   properties:
   - name: user
