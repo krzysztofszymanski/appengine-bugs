@@ -39,15 +39,6 @@ class SettingsTest(unittest.TestCase):
         except AttributeError:
             self.assertFalse("CACHE not defined in settings")
 
-    def test_presense_of_system_url(self):  
-        try:
-            url = settings.SYSTEM_URL
-            if not URL_RE.match(url):
-                self.assertFalse("SYSTEM_URL defined but not a valid URL")
-            self.assertTrue("SYSTEM_URL defined in settings")
-        except AttributeError:
-            self.assertFalse("SYSTEM_URL not defined in settings")
-            
     def test_value_of_debug(self):
         self.assertFalse(settings.debug)
                                        

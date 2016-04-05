@@ -5,15 +5,15 @@ from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.api import users
 from google.appengine.ext.webapp.util import run_wsgi_app
-from project_handler import *
-from projects_handler import *
-from issue_handler import *
 import json as simplejson
 from lib import BaseRequest, get_cache, slugify
 import settings
 from models import Project, Issue
 
-
+from project_handler import *
+from projects_handler import *
+from issue_handler import *
+from comments_handler import *
 
 
 class Index(BaseRequest):
@@ -62,6 +62,7 @@ def application():
         ('/projects/([A-Za-z0-9-]+)/delete/?$', ProjectDeleteHandler),
         ('/projects/([A-Za-z0-9-]+)/settings/?$', ProjectSettingsHandler),
         ('/projects/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$', IssueHandler),
+        ('/projects/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/comments?$', CommentsHandler),
         ('/projects/([A-Za-z0-9-]+)/?$', ProjectHandler),
         ('/.*', NotFoundPageHandler),
     ]

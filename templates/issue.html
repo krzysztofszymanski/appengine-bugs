@@ -82,6 +82,27 @@
 <p>{{issue.description}}</p>
 </div>
 
+    <div>
+
+        <h2>Comments:</h2>
+        <hr>
+        {% for comment in issue.comments %}
+        {{comment.user}} on {{comment.created_date}} wrote:
+        <p>{{comment.comment}}</p>
+
+        <hr>
+        {% endfor %}
+
+    </div>
+
+    <div>
+        Post comment:
+        <form action="comments" method="POST">
+            <input type="text" id="comment" name="comment">
+            <input type="submit" title="Add"/>
+        </form>
+    </div>
+
 {% if issues %}
 <div id="extra">
     <h2>Other project issues</h2>

@@ -10,6 +10,3 @@ DEBUG = debug
 
 # enable or disable the memcache here, useful for debugging
 CACHE = not debug
-
-# URL of the current system, used in feeds
-SYSTEM_URL = "http://knktechnologybugtracker.appspot.com"
