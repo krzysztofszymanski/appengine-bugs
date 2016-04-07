@@ -1,16 +1,10 @@
-from lib import BaseRequest, get_cache, slugify
-from google.appengine.api import users
-import re
-import os
 import logging
-from datetime import datetime
 
+from lib import BaseRequest, get_cache
+from google.appengine.api import users
 from google.appengine.api import memcache
 from google.appengine.ext import db
-from google.appengine.ext import webapp
 from google.appengine.api import users
-from google.appengine.ext.webapp.util import run_wsgi_app
-from project_handler import *
 from models import *
 
 

@@ -5,7 +5,6 @@ import logging
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-
 from lib import BaseRequest, get_cache
 import settings
 

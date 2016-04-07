@@ -18,6 +18,23 @@ indexes:
 
 - kind: Issue
   properties:
+  - name: assignee
+  - name: fixed
+  - name: created_date
+
+- kind: Issue
+  properties:
+  - name: assignee=
+  - name: fixed
+  - name: created_date
+
+- kind: Issue
+  properties:
+  - name: fixed
+  - name: created_date
+
+- kind: Issue
+  properties:
   - name: fixed
   - name: project
   - name: created_date

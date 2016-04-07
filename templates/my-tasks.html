@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{project.name}}{% endblock %}
+
+{% block header %}
+    <div id="header">
+        <h1>My tasks:</h1>
+
+        <p>
+            <a href="/my-tasks/?status=open">Open issues</a>
+            | <a href="/my-tasks/?status=closed">Closed issues</a>
+            | <a href="/my-tasks/?status=all">All issues</a>
+
+        </p>
+
+    </div>
+{% endblock %}
+
+
+{% block projects_nav %} class="this"{% endblock %}
+
+{% block content %}
+<div id="content">
+{% include "_issues.html" %}
+
+{% if owner %}
+
+
+{% endif %}
+
+</div>
+{% endblock %}

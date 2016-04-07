@@ -19,9 +19,11 @@ directory and they should be run when you run test.py via the command line.
 
 import os
 import unittest
-import coverage
 from optparse import OptionParser
-     
+
+import coverage
+
+
 def run_tests(verbosity):
     "Run test suite"
 
@@ -42,8 +44,8 @@ def run_tests(verbosity):
             # work out the module name
             code_module_name = os.path.splitext(file_name)[0:-1][0]
             # now import the module
-            module = __import__(code_module_name, globals(), locals(), 
-                code_module_name)
+            module = __import__(code_module_name, globals(), locals(),
+                                code_module_name)
             # and add it to the list of available modules
             code_modules.append(module)
 
@@ -56,46 +58,47 @@ def run_tests(verbosity):
             # work out the module name
             test_module_name = "tests." + os.path.splitext(file_name)[0:-1][0]
             # now import the module
-            module = __import__(test_module_name, globals(), locals(), 
-                test_module_name)
+            module = __import__(test_module_name, globals(), locals(),
+                                test_module_name)
             # and add it to the list of available modules
             test_modules.append(module)
-        
+
     # populate a test suite from the individual tests from the list of modules
     suite = unittest.TestSuite(map(
         unittest.defaultTestLoader.loadTestsFromModule, test_modules))
 
     # set up the test runner
     runner = unittest.TextTestRunner(verbosity=int(verbosity))
-    
+
     # set up coverage reporting
     coverage.use_cache(0)
     coverage.start()
-    
+
     # run the tests
     runner.run(suite)
-    
+
     # stop coverage reporting
     coverage.stop()
-    
+
     # output coverage report
     coverage.report(code_modules, show_missing=1)
-    
+
+
 if __name__ == '__main__':
     # instantiate the arguments parser
     PARSER = OptionParser()
     # add an option so we can set the test runner verbosity
-    PARSER.add_option('--verbosity', 
-                        action='store', 
-                        dest='verbosity', 
-                        default='1',
-                        type='choice', 
-                        choices=['0', '1', '2'],
-                        help="""Verbosity level; 0=minimal output, 
+    PARSER.add_option('--verbosity',
+                      action='store',
+                      dest='verbosity',
+                      default='1',
+                      type='choice',
+                      choices=['0', '1', '2'],
+                      help="""Verbosity level; 0=minimal output,
                             1=normal output, 2=all output"""
-                        ),
+    ),
     # parse the command arguments
     (OPTIONS, ARGS) = PARSER.parse_args()
-        
+
     # run the tests with the passed verbosity
     run_tests(OPTIONS.verbosity)

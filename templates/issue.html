@@ -55,12 +55,17 @@
     <div>
         <label for="description">Description</label>
         <textarea id="description" name="description">{{issue.description}}</textarea>
-        <p>Supports Textile formatting</p>
     </div>
     <div>
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" value="{% if issue.email %}{{issue.email}}{% endif %}" class="txt"/>
-        <p>If you would like to be alerted when this bug is fixed.</p>
+        <p>Assign issue to...</p>
+        <label for="assignee">Assignee</label>
+        <input type="text" name="assignee" id="assignee" value="{% if issue.assignee %}{{issue.assignee}}{% endif %}" class="txt"/>
+
+    </div>
+    <div>
+        <p>Issue watchers(comma or space separated):</p>
+        <label for="watchers">Watchers</label>
+        <textarea id="watchers" name="watchers">{% if issue.watchers %}{% for watcher in issue.watchers %}{% if watcher %}{{watcher}},{% endif %}{% endfor %}{% endif %}</textarea>
     </div>
     <div>
         <label for="fixed">Fixed</label>

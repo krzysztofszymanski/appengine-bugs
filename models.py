@@ -2,10 +2,7 @@ from datetime import datetime
 
 from google.appengine.ext import db
 from google.appengine.ext import search
-from google.appengine.api import mail
-
-from lib import slugify, textile
-import settings
+from lib import slugify
 
 
 class Project(db.Model):
@@ -58,12 +55,10 @@ class Issue(search.SearchableModel):
     fixed_description = db.TextProperty()
     identifier = db.IntegerProperty()
     assignee = db.EmailProperty()
+    watchers = db.StringListProperty()
 
     def put(self):
-        "Overridden save method"
-        # we save the html here as it's faster than processing 
-        # everytime we display it
-
+        # TODO: remove business logic from models
         # internal url is set on first save and then not changed
         # as the admin interface doesn't allow for changing name
         if not self.internal_url:
@@ -96,20 +91,6 @@ class Issue(search.SearchableModel):
             self.fixed_date = datetime.now()
         else:
             self.fixed_date = None
-
-        # if the bug has been fixed then send an email
-        if self.fixed and self.email:
-            mail.send_mail(sender="kontakt@knkcnc.com",
-                           to=self.email,
-                           subject="Bug has been fixed",
-                           body="""Bug was fixed:
-                           Issue name: %s
-                           Description: %s
-                           -------
-                           %s
-                           -------"""
-                                % (
-                           self.name, self.description, self.fixed_description))
 
         super(Issue, self).put()
 

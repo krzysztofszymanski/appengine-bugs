@@ -347,3 +347,8 @@ form div p {
 .clear {
     clear:both;
 }
+hr {
+    height: 1px;
+    border: 0px solid #CCC;
+    background-color: #CCC;
+}

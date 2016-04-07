@@ -58,16 +58,20 @@
     </div>
     <div>
         <label for="description">Description</label>
-        <textarea id="description" name="description"></textarea>
-        <p>Supports Textile formatting</p>
+        <textarea id="description" name="description">{{issue.description}}</textarea>
     </div>
-    {% if user %}
+
     <div>
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" value="{{user.email}}"  class="txt"/>
-        <p>If you would like to be alerted when this bug is fixed.</p>
+        <p>Assign issue to...</p>
+        <label for="assignee">Assignee</label>
+        <input type="text" name="assignee" id="assignee" value="" class="txt"/>
+
     </div>
-    {% endif %}
+    <div>
+        <p>Add issue watchers(comma or space separated):</p>
+        <label for="watchers">Watchers</label>
+        <textarea id="watchers" name="watchers"></textarea>
+    </div>
     <input type="submit" value="Add issue" class="btn"/>
     <a href=".">Cancel</a>
 </form>

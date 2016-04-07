@@ -5,6 +5,7 @@
             <th scope="col">Name</th>
             <th scope="col">Identifier</th>
             <th scope="col">Description</th>
+            <th scope="col">Assignee</th>
             <th scope="col">Date</th>
             <th scope="col">Status</th>
         </tr>
@@ -20,6 +21,10 @@
         <td>
             {{issue.description|striptags|truncatewords:10}}
         </td>
+        <td>
+            {{issue.assignee}}
+        </td>
+
         <td>
             {{issue.created_date|date:"jS F Y"}}
         </td>

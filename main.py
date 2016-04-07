@@ -1,19 +1,14 @@
 #!/usr/bin/env python
 
 from google.appengine.api import memcache
-from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.api import users
 from google.appengine.ext.webapp.util import run_wsgi_app
-import json as simplejson
-from lib import BaseRequest, get_cache, slugify
-import settings
-from models import Project, Issue
 
-from project_handler import *
 from projects_handler import *
 from issue_handler import *
 from comments_handler import *
+from my_tasks_handler import *
 
 
 class Index(BaseRequest):
@@ -38,7 +33,6 @@ class Index(BaseRequest):
         self.response.out.write(output)
 
 
-
 class NotFoundPageHandler(BaseRequest):
     def get(self):
         self.error(404)
@@ -58,11 +52,13 @@ def application():
     # wire up the views
     ROUTES = [
         ('/', Index),
+        ('/my-tasks/?$', MyTasksHandler),
         ('/projects/?$', ProjectsHandler),
         ('/projects/([A-Za-z0-9-]+)/delete/?$', ProjectDeleteHandler),
         ('/projects/([A-Za-z0-9-]+)/settings/?$', ProjectSettingsHandler),
         ('/projects/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/?$', IssueHandler),
-        ('/projects/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/comments?$', CommentsHandler),
+        ('/projects/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)/comments?$',
+         CommentsHandler),
         ('/projects/([A-Za-z0-9-]+)/?$', ProjectHandler),
         ('/.*', NotFoundPageHandler),
     ]

@@ -16,5 +16,27 @@ class Dao(object):
                 Dao, cls).__new__(cls, *args, **kwargs)
         return cls._instance
 
-    def add_comment(self, issue, comment):
-        pass
+    def get_issues_for_project(self, project, status):
+        issues = Issue.all().filter('project =', project)
+        if status != '':
+            if "open" == status:
+                issues = issues.filter('fixed =', False)
+            if "closed" == status:
+                issues = issues.filter('fixed =', True)
+        else:
+            issues = issues.filter('fixed =', False)
+        issues = issues.order('fixed').order('created_date')
+        return issues
+
+    def get_issues_for_user(self, user, status):
+        issues = Issue.all().filter('assignee =', user)
+
+        if status != '':
+            if "open" == status:
+                issues = issues.filter('fixed =', False)
+            if "closed" == status:
+                issues = issues.filter('fixed =', True)
+        else:
+            issues = issues.filter('fixed =', False)
+        issues = issues.order('fixed').order('created_date')
+        return issues

@@ -1,15 +1,8 @@
-from lib import BaseRequest, get_cache, slugify
 from google.appengine.api import users
-import re
-import os
-import logging
-from datetime import datetime
 
 from google.appengine.api import memcache
 from google.appengine.ext import db
-from google.appengine.ext import webapp
 from google.appengine.api import users
-from google.appengine.ext.webapp.util import run_wsgi_app
 from project_handler import *
 from models import *
 
@@ -219,27 +212,27 @@ class ProjectSettingsHandler(BaseRequest):
         self.redirect('/projects/%s/settings/' % project.slug)
 
 
-    # def post(self, project_slug, issue_slug):
-    #
-    #     # if we don't have a user then throw
-    #     # an unauthorised error
-    #     user = users.get_current_user()
-    #     if not user:
-    #         self.render_403()
-    #         return
-    #
-    #     issue = Issue.all().filter('internal_url =', "/%s/%s/" % (
-    #         project_slug, issue_slug)).fetch(1)[0]
-    #
-    #     user = users.get_current_user()
-    #     if issue.project.user == user:
-    #         try:
-    #             logging.info("deleted issue: %s in %s" % (
-    #                 issue.name, issue.project.name))
-    #             issue.delete()
-    #         except Exception, e:
-    #             logging.error("error deleting issue: %s" % e)
-    #         self.redirect("/projects/%s" % issue.project.slug)
-    #     else:
-    #         self.render_403()
-    #         return
+        # def post(self, project_slug, issue_slug):
+        #
+        # # if we don't have a user then throw
+        #     # an unauthorised error
+        #     user = users.get_current_user()
+        #     if not user:
+        #         self.render_403()
+        #         return
+        #
+        #     issue = Issue.all().filter('internal_url =', "/%s/%s/" % (
+        #         project_slug, issue_slug)).fetch(1)[0]
+        #
+        #     user = users.get_current_user()
+        #     if issue.project.user == user:
+        #         try:
+        #             logging.info("deleted issue: %s in %s" % (
+        #                 issue.name, issue.project.name))
+        #             issue.delete()
+        #         except Exception, e:
+        #             logging.error("error deleting issue: %s" % e)
+        #         self.redirect("/projects/%s" % issue.project.slug)
+        #     else:
+        #         self.render_403()
+        #         return

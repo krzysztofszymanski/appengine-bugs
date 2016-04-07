@@ -14,11 +14,13 @@ h2. Installation
 
 Two small changes are required if you want to get this up and running
 
-First change the application name in the app.yml file.
+*First change the application name in the app.yml file.
 Appengine ensures these are unique and match the application name you registered through the console.
 
-file to the URL you're hosting it from.
-This is at the moment only used to make sure all links in feeds point tothe right place.
+*file to the URL you're hosting it from.
+This is at the moment only used to make sure all links in feeds point to the right place.
+
+* add conf.py(copy of cont_default.py) and provide your SendGrid details.
 
 h2. Credits
 
@@ -29,7 +31,7 @@ h2. License
 
 The MIT License
  
-Copyright (c) 2009 KNKTechnology
+Copyright (c) 2016 KNKTechnology
  
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

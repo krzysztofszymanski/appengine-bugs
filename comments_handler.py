@@ -1,13 +1,7 @@
-from google.appengine.api import memcache
-from google.appengine.ext import db
-from google.appengine.ext import webapp
 from google.appengine.api import users
-from google.appengine.ext.webapp.util import run_wsgi_app
 from project_handler import *
-import json as simplejson
-from lib import BaseRequest, get_cache, slugify
-import settings
-from models import Project, Issue
+from lib import BaseRequest
+from models import Issue
 
 
 class CommentsHandler(BaseRequest):

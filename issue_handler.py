@@ -1,13 +1,10 @@
+import re
+
 from google.appengine.api import memcache
-from google.appengine.ext import db
-from google.appengine.ext import webapp
 from google.appengine.api import users
-from google.appengine.ext.webapp.util import run_wsgi_app
-from project_handler import *
-import json as simplejson
-from lib import BaseRequest, get_cache, slugify
-import settings
-from models import Project, Issue
+from lib import BaseRequest
+from models import Issue
+from email_service import *
 
 
 class IssueHandler(BaseRequest):
@@ -25,7 +22,7 @@ class IssueHandler(BaseRequest):
         if output is None:
             try:
                 issue = Issue.all().filter('internal_url =', "/%s/%s/" % (
-                project_slug, issue_slug)).fetch(1)[0]
+                    project_slug, issue_slug)).fetch(1)[0]
                 issues = Issue.all().filter('project =', issue.project).filter(
                     'fixed =', False).fetch(10)
             except IndexError:
@@ -56,6 +53,7 @@ class IssueHandler(BaseRequest):
 
         self.response.out.write(output)
 
+
     def post(self, project_slug, issue_slug):
 
         # if we don't have a user then throw
@@ -66,31 +64,55 @@ class IssueHandler(BaseRequest):
             return
 
         issue = Issue.all().filter('internal_url =', "/%s/%s/" % (
-        project_slug, issue_slug)).fetch(1)[0]
+            project_slug, issue_slug)).fetch(1)[0]
 
         user = users.get_current_user()
 
         name = self.request.get("name")
         description = self.request.get("description")
-        email = self.request.get("email")
+        assignee = self.request.get("assignee")
         fixed = self.request.get("fixed")
         fixed_description = self.request.get("fixed_description")
+        watchers = self.request.get("watchers")
+        if watchers:
+            issue.watchers = []
+            watchers_list = re.split(",| |\n", watchers)
+
+            for watcher in watchers_list:
+                watcher = watcher.strip()
+                if watcher and watcher != '':
+                    issue.watchers.append(watcher)
+        else:
+            issue.watchers = []
 
         issue.name = name
         issue.description = description
-        if email:
-            issue.email = email
+        if assignee:
+            issue.assignee = assignee
         else:
-            issue.email = None
+            issue.assignee = None
         issue.fixed = bool(fixed)
         if fixed:
             issue.fixed_description = fixed_description
         else:
             issue.fixed_description = None
-
         issue.put()
-        logging.info(
-            "issue edited: %s in %s" % (issue.name, issue.project.name))
-
-        self.redirect("/projects%s" % issue.internal_url)
-
+        email_service = EmailService()
+        if issue.fixed and issue.email:
+            body = """Finished task:
+                           {}
+                           -------
+                           {}
+                           -------""".format(issue.name,
+                                             issue.name,
+                                             issue.description,
+                                             issue.fixed_description)
+            to = [issue.assignee]
+            if issue.watchers:
+                to.extend(issue.watchers)
+            email_service.send_email(from_email=issue.assignee,
+                                     to_emails=to,
+                                     subject="Task finished: {}".format(
+                                         issue.name),
+                                     body=body)
+        self.redirect("/projects{}".format(issue.internal_url))
