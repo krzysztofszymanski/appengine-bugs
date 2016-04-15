@@ -3,8 +3,9 @@ from google.appengine.api import users
 from google.appengine.api import memcache
 from google.appengine.ext import db
 from google.appengine.api import users
-from project_handler import *
 from models import *
+from lib import *
+from service import *
 
 
 class ProjectHandler(BaseRequest):
@@ -63,21 +64,17 @@ class ProjectHandler(BaseRequest):
         "Create an issue against this project"
         project = Project.all().filter('slug =', slug).fetch(1)[0]
         # get details from the form
-        name = self.request.get("name")
-        description = self.request.get("description")
-        email = self.request.get("email")
 
         try:
-            if Issue.all().filter('name =', name).filter('project =',
-                                                         project).count() == 0:
-                issue = Issue(
-                    name=name,
-                    description=description,
-                    project=project,
-                )
-                if email:
-                    issue.email = email
+            name = self.request.get("name")
+            if Issue.all().filter('name =', name).filter(
+                    'project =', project).count() == 0:
+                issue = Issue(project=project, name=name)
+                issue = Service.update_issue_with_request_values(
+                    issue, self.request)
                 issue.put()
+                service = Service()
+                service.send_issue_created_email(issue)
         except Exception, e:
             logging.error("error adding issue: %s" % e)
 
@@ -215,11 +212,11 @@ class ProjectSettingsHandler(BaseRequest):
         # def post(self, project_slug, issue_slug):
         #
         # # if we don't have a user then throw
-        #     # an unauthorised error
-        #     user = users.get_current_user()
-        #     if not user:
-        #         self.render_403()
-        #         return
+        # # an unauthorised error
+        # user = users.get_current_user()
+        # if not user:
+        # self.render_403()
+        # return
         #
         #     issue = Issue.all().filter('internal_url =', "/%s/%s/" % (
         #         project_slug, issue_slug)).fetch(1)[0]

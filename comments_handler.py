@@ -1,7 +1,8 @@
 from google.appengine.api import users
-from project_handler import *
 from lib import BaseRequest
 from models import Issue
+from models import Comment
+from service import *
 
 
 class CommentsHandler(BaseRequest):
@@ -12,6 +13,7 @@ class CommentsHandler(BaseRequest):
         if not user:
             self.render_403()
             return
+        service = Service()
 
         issue = Issue.all().filter('internal_url =', "/%s/%s/" % (
             project_slug, issue_slug)).fetch(1)[0]
@@ -19,5 +21,6 @@ class CommentsHandler(BaseRequest):
         comment = Comment(issue=issue, comment=comment,
                           user=users.get_current_user().email())
         comment.put()
+        service.send_comment_email(issue, comment)
         self.redirect("/projects{}".format(issue.internal_url))
 

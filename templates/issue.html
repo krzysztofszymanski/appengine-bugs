@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block script %}
-{% if owner %}
+
 <script type="text/javascript" charset="utf-8">
     $(function(){
         $('#changeissue').hide();
@@ -38,14 +38,13 @@
         });
     });
 </script>
-{% endif %}
 {% endblock %}
 
 
 {% block content %}
 <div id="content">
 
-{% if owner %}
+
 
 <form action="" method="post" id="changeissue">
     <div>
@@ -81,20 +80,22 @@
     <a href=".">Cancel</a>
 </form>
 
-{% endif %}
 
 <div id="txt">
-<p>{{issue.description}}</p>
+<p> {{issue.description}} </p>
 </div>
 
-    <div>
+    <div class="comment">
 
         <h2>Comments:</h2>
         <hr>
         {% for comment in issue.comments %}
-        {{comment.user}} on {{comment.created_date}} wrote:
-        <p>{{comment.comment}}</p>
-
+        <div>
+        {{comment.user}} on {{comment.created_date}} wrote:<br>
+            {% for commentLine in comment.comment|split %}
+            <p> {{commentLine}} </p>
+            {% endfor %}
+        </div>
         <hr>
         {% endfor %}
 
@@ -103,7 +104,7 @@
     <div>
         Post comment:
         <form action="comments" method="POST">
-            <input type="text" id="comment" name="comment">
+            <textarea name="comment" id="comment" ></textarea>
             <input type="submit" title="Add"/>
         </form>
     </div>

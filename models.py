@@ -43,12 +43,18 @@ class Counter(db.Model):
 
 
 class Issue(search.SearchableModel):
+
+    @staticmethod
+    def issue_with_request(request):
+        Issue()
+
     """Issue or bug representation"""
     name = db.StringProperty(required=True)
+    project = db.ReferenceProperty(Project, required=True)
+
     description = db.TextProperty()
     created_date = db.DateTimeProperty(auto_now_add=True)
     email = db.EmailProperty()
-    project = db.ReferenceProperty(Project, required=True)
     internal_url = db.StringProperty()
     fixed = db.BooleanProperty(default=False)
     fixed_date = db.DateTimeProperty()
@@ -96,11 +102,12 @@ class Issue(search.SearchableModel):
 
     @property
     def comments(self):
-        return self.comment_set.order('-created_date')
+        return self.comment_set.order('created_date')
 
 
 class Comment(db.Model):
-    comment = db.StringProperty(required=True)
+    comment = db.StringProperty(required=True, multiline=True)
+    deleted = db.BooleanProperty()
     user = db.EmailProperty()
     created_date = db.DateTimeProperty(auto_now_add=True)
     issue = db.ReferenceProperty(Issue,

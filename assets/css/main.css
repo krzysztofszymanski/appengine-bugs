@@ -352,3 +352,7 @@ hr {
     border: 0px solid #CCC;
     background-color: #CCC;
 }
+form textarea#comment {
+    width: 600px;
+    height:200px;
+}

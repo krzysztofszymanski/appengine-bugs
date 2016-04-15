@@ -1,13 +1,13 @@
-import re
-
-from google.appengine.api import memcache
 from google.appengine.api import users
 from lib import BaseRequest
+from service import *
 from models import Issue
-from email_service import *
+from google.appengine.ext.webapp import template
 
+template.register_template_library('tags.br')
 
 class IssueHandler(BaseRequest):
+
     def get(self, project_slug, issue_slug):
         if self.request.path[-1] != "/":
             self.redirect("%s/" % self.request.path, True)
@@ -15,44 +15,37 @@ class IssueHandler(BaseRequest):
 
         user = users.get_current_user()
 
-        output = None
         if not user:
             self.redirect('/')
 
-        if output is None:
-            try:
-                issue = Issue.all().filter('internal_url =', "/%s/%s/" % (
-                    project_slug, issue_slug)).fetch(1)[0]
-                issues = Issue.all().filter('project =', issue.project).filter(
-                    'fixed =', False).fetch(10)
-            except IndexError:
-                self.render_404()
-                return
+        try:
+            issue = Issue.all().filter('internal_url =', "/%s/%s/" % (
+                project_slug, issue_slug)).fetch(1)[0]
+            issues = Issue.all().filter('project =', issue.project).filter(
+                'fixed =', False).fetch(10)
+        except IndexError:
+            self.render_404()
+            return
 
-            on_list = False
-            try:
-                if user.email() in issue.project.other_users:
-                    on_list = True
-            except:
-                pass
+        on_list = False
+        try:
+            if user.email() in issue.project.other_users:
+                on_list = True
+        except:
+            pass
 
-            if issue.project.user == user or users.is_current_user_admin() or on_list:
-                owner = True
-            else:
-                owner = False
-            context = {
-                'issue': issue,
-                'issues': issues,
-                'owner': owner,
-            }
-            # calculate the template path
-            output = self.render("issue.html", context)
+        if issue.project.user == user or users.is_current_user_admin() or on_list:
+            owner = True
+        else:
+            owner = False
+        context = {
+            'issue': issue,
+            'issues': issues,
+            'owner': owner,
+        }
 
-        if not user:
-            memcache.add("/%s/%s/" % (project_slug, issue_slug), output, 60)
-
+        output = self.render("issue.html", context)
         self.response.out.write(output)
-
 
     def post(self, project_slug, issue_slug):
 
@@ -65,54 +58,12 @@ class IssueHandler(BaseRequest):
 
         issue = Issue.all().filter('internal_url =', "/%s/%s/" % (
             project_slug, issue_slug)).fetch(1)[0]
-
-        user = users.get_current_user()
-
-        name = self.request.get("name")
-        description = self.request.get("description")
-        assignee = self.request.get("assignee")
-        fixed = self.request.get("fixed")
-        fixed_description = self.request.get("fixed_description")
-        watchers = self.request.get("watchers")
-        if watchers:
-            issue.watchers = []
-            watchers_list = re.split(",| |\n", watchers)
-
-            for watcher in watchers_list:
-                watcher = watcher.strip()
-                if watcher and watcher != '':
-                    issue.watchers.append(watcher)
-        else:
-            issue.watchers = []
-
-        issue.name = name
-        issue.description = description
-        if assignee:
-            issue.assignee = assignee
-        else:
-            issue.assignee = None
-        issue.fixed = bool(fixed)
-        if fixed:
-            issue.fixed_description = fixed_description
-        else:
-            issue.fixed_description = None
+        Service.update_issue_with_request_values(issue, self.request)
         issue.put()
-        email_service = EmailService()
-        if issue.fixed and issue.email:
-            body = """Finished task:
-                           {}
-                           -------
-                           {}
-                           -------""".format(issue.name,
-                                             issue.name,
-                                             issue.description,
-                                             issue.fixed_description)
-            to = [issue.assignee]
-            if issue.watchers:
-                to.extend(issue.watchers)
-            email_service.send_email(from_email=issue.assignee,
-                                     to_emails=to,
-                                     subject="Task finished: {}".format(
-                                         issue.name),
-                                     body=body)
+        service = Service()
+        if issue.fixed:
+            service.send_fixed_email(issue)
+        else:
+            service.send_issue_updated_email(issue)
+
         self.redirect("/projects{}".format(issue.internal_url))

@@ -1,7 +1,7 @@
 from sendgrid import SendGridClient
 from sendgrid import Mail
 import conf
-
+from google.appengine.api import users
 
 class EmailService(object):
     """
@@ -20,7 +20,6 @@ class EmailService(object):
         return cls._instance
 
     def send_email(self,
-                   from_email,
                    to_emails,
                    subject,
                    body):
@@ -31,7 +30,7 @@ class EmailService(object):
         message = Mail()
         message.set_subject(subject)
         message.set_text(body)
-        message.set_from(from_email)
+        message.set_from(users.get_current_user().email())
         # add a recipient
         for to in to_emails:
             message.add_to(to)

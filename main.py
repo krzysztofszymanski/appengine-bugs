@@ -5,7 +5,9 @@ from google.appengine.ext import webapp
 from google.appengine.api import users
 from google.appengine.ext.webapp.util import run_wsgi_app
 
+from lib import *
 from projects_handler import *
+from project_handler import *
 from issue_handler import *
 from comments_handler import *
 from my_tasks_handler import *
